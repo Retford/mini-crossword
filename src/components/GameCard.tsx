@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import { KeyboardGrid } from './keyboard/KeyboardGrid';
 import { CrosswordGrid } from './table/CrosswordGrid';
@@ -17,9 +16,9 @@ export const GameCard = () => {
   const [grid, setGrid] = useState<(string | null)[][]>(initialGrid);
   const [message, setMessage] = useState<string>('');
   const [instructions, setInstructions] = useState('');
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(
-    null
-  );
+  const [selectedCell, setSelectedCell] = useState<[number, number] | null>([
+    0, 2,
+  ]);
 
   const handleKeyPress = (key: string) => {
     if (!selectedCell) return;
@@ -44,12 +43,11 @@ export const GameCard = () => {
         }
         nextCol++;
       } else {
-        setSelectedCell([0, 2]);
-
         nextRow++;
         nextCol = 0;
       }
     }
+    setSelectedCell([0, 2]);
   };
 
   useEffect(() => {
@@ -78,21 +76,28 @@ export const GameCard = () => {
     return true;
   }
 
-  const handleCheck = () => {
-    const allCorrect = words.every((word) => checkAnswer(word, grid));
-    setMessage(
-      allCorrect ? '¡Todo correcto! 🎉' : 'Algunas palabras están incorrectas.'
-    );
-  };
-
   // Cambiar el nombre de la pista
   useEffect(() => {
     for (let i = 0; i < words.length; i++) {
       if (selectedCell?.[0] === i) {
-        setInstructions(words[i].clue);
+        setInstructions(`${i + 1}.- ${words[i].clue}`);
       }
     }
   }, [selectedCell]);
+
+  const validationFullGrid = grid.flat().some((value) => value === '');
+
+  useEffect(() => {
+    if (!validationFullGrid) {
+      const allCorrect = words.every((word) => checkAnswer(word, grid));
+
+      setMessage(
+        allCorrect
+          ? '¡Todo correcto! 🎉'
+          : 'Algunas palabras están incorrectas.'
+      );
+    }
+  }, [validationFullGrid, grid]);
 
   return (
     <div className='relative w-[400px] h-[700px] bg-white rounded-lg flex flex-col items-center justify-between font-subtitle gap-8 shadow-xl text-black'>
@@ -112,19 +117,13 @@ export const GameCard = () => {
         />
       </div>
       <div className='w-full'>
-        <div className='flex items-center justify-between px-8 gap-4 bg-[#A7D8FF] py-6'>
-          <FaChevronLeft />
-
-          <p className='w-full h-6'>{instructions}</p>
-          <FaChevronRight />
+        <div className='px-8 bg-[#A7D8FF] py-6'>
+          <p className='w-full h-6 text-center font-bold text-xl'>
+            {instructions}
+          </p>
         </div>
         <KeyboardGrid onKeyPress={handleKeyPress} />
-        <button
-          onClick={handleCheck}
-          className='mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
-        >
-          Verificar
-        </button>
+
         {message && <p className='mt-2 font-medium'>{message}</p>}
       </div>
     </div>
