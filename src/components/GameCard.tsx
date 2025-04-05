@@ -3,6 +3,11 @@ import { IoClose } from 'react-icons/io5';
 import { KeyboardGrid } from './keyboard/KeyboardGrid';
 import { CrosswordGrid } from './table/CrosswordGrid';
 import { type Word, words } from './words/words';
+import Swal from 'sweetalert2';
+
+interface Props {
+  onEnd: () => void;
+}
 
 const initialGrid: (string | null)[][] = [
   [null, null, '', '', ''],
@@ -12,9 +17,8 @@ const initialGrid: (string | null)[][] = [
   ['', '', '', null, null],
 ];
 
-export const GameCard = () => {
+export const GameCard = ({ onEnd }: Props) => {
   const [grid, setGrid] = useState<(string | null)[][]>(initialGrid);
-  const [message, setMessage] = useState<string>('');
   const [instructions, setInstructions] = useState('');
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>([
     0, 2,
@@ -91,13 +95,29 @@ export const GameCard = () => {
     if (!validationFullGrid) {
       const allCorrect = words.every((word) => checkAnswer(word, grid));
 
-      setMessage(
-        allCorrect
-          ? '¡Todo correcto! 🎉'
-          : 'Algunas palabras están incorrectas.'
-      );
+      if (allCorrect) {
+        Swal.fire({
+          text: 'Congratulations, everything is OK',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          preConfirm: () => onEnd(),
+          didClose() {
+            onEnd();
+          },
+        });
+      } else {
+        Swal.fire({
+          text: 'Try again!',
+          icon: 'error',
+          confirmButtonText: 'Cool',
+          preConfirm: () => setGrid(initialGrid),
+          didClose() {
+            setGrid(initialGrid);
+          },
+        });
+      }
     }
-  }, [validationFullGrid, grid]);
+  }, [validationFullGrid, grid, onEnd]);
 
   return (
     <div className='relative w-[400px] h-[700px] bg-white rounded-lg flex flex-col items-center justify-between font-subtitle gap-8 shadow-xl text-black'>
@@ -123,8 +143,6 @@ export const GameCard = () => {
           </p>
         </div>
         <KeyboardGrid onKeyPress={handleKeyPress} />
-
-        {message && <p className='mt-2 font-medium'>{message}</p>}
       </div>
     </div>
   );
