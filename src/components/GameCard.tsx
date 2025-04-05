@@ -120,7 +120,7 @@ export const GameCard = ({ onEnd }: Props) => {
   }, [validationFullGrid, grid, onEnd]);
 
   return (
-    <div className='relative w-[400px] h-[700px] bg-white rounded-lg flex flex-col items-center justify-between font-subtitle gap-8 shadow-xl text-black'>
+    <div className='relative w-full h-svh sm:w-[400px] sm:h-[700px] bg-white sm:rounded-lg flex flex-col items-center justify-between font-subtitle gap-8 shadow-xl text-black'>
       <div className='absolute top-2 right-2 text-black'>
         <IoClose size={28} />
       </div>
@@ -138,7 +138,7 @@ export const GameCard = ({ onEnd }: Props) => {
       </div>
       <div className='w-full'>
         <div className='px-8 bg-[#A7D8FF] py-6'>
-          <p className='w-full h-6 text-center font-bold text-xl'>
+          <p className='w-full h-auto text-base sm:h-6 text-center font-bold sm:text-xl'>
             {instructions}
           </p>
         </div>

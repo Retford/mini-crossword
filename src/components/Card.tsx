@@ -16,7 +16,7 @@ export const Card = ({
   onRestart,
 }: Props) => {
   return (
-    <div className='relative w-[400px] h-[700px] bg-[#5A82B4] rounded-lg flex flex-col items-center justify-center font-subtitle gap-8 shadow-xl shadow-gray-400'>
+    <div className='relative w-full h-svh sm:w-[400px] sm:h-[700px] bg-[#5A82B4] sm:rounded-lg flex flex-col items-center justify-center font-subtitle gap-8 shadow-xl shadow-gray-400'>
       <div className='absolute top-2 right-2 text-black'>
         <svg width='40' height='40' viewBox='0 0 24 24'>
           <path
