@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light dark;
+  color: CanvasText;
+  background-color: #F0F0F0;
+}
+
+@theme {
+  --font-title: 'Old English Text MT', sans-serif;
+  --font-subtitle: 'Noto Sans', sans-serif;
+}
