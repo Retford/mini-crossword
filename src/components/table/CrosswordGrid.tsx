@@ -12,6 +12,9 @@ export const CrosswordGrid = ({
   selectedCell,
   setSelectedCell,
 }: Props) => {
+  const isInSelectedRow = (rowIndex: number) =>
+    selectedCell ? selectedCell[0] === rowIndex : false;
+
   return (
     <div className='grid grid-cols-5 justify-center items-center relative'>
       {grid.map((row, rowIndex) =>
@@ -24,6 +27,7 @@ export const CrosswordGrid = ({
             isSelected={
               selectedCell?.[0] === rowIndex && selectedCell?.[1] === colIndex
             }
+            isHighlighted={isInSelectedRow(rowIndex)}
           />
         ))
       )}

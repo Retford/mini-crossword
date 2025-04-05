@@ -32,6 +32,24 @@ export const GameCard = () => {
     newGrid[row] = [...newGrid[row]];
     newGrid[row][col] = key;
     setGrid(newGrid);
+
+    let nextRow = row;
+    let nextCol = col + 1;
+
+    while (nextRow < grid.length) {
+      if (nextCol < grid[nextRow].length) {
+        if (grid[nextRow][nextCol] !== null) {
+          setSelectedCell([nextRow, nextCol]);
+          return;
+        }
+        nextCol++;
+      } else {
+        setSelectedCell([0, 2]);
+
+        nextRow++;
+        nextCol = 0;
+      }
+    }
   };
 
   useEffect(() => {
