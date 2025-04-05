@@ -3,9 +3,18 @@ interface Props {
   img: string;
   button: string;
   className?: string;
+  onStart?: () => void;
+  onRestart?: () => void;
 }
 
-export const Card = ({ desc, img, button, className }: Props) => {
+export const Card = ({
+  desc,
+  img,
+  button,
+  className,
+  onStart,
+  onRestart,
+}: Props) => {
   return (
     <div className='relative w-[400px] h-[700px] bg-[#5A82B4] rounded-lg flex flex-col items-center justify-center font-subtitle gap-8 shadow-xl shadow-gray-400'>
       <div className='absolute top-2 right-2 text-black'>
@@ -29,16 +38,25 @@ export const Card = ({ desc, img, button, className }: Props) => {
         </div>
       </div>
       <div className='flex flex-col items-center justify-center gap-3'>
-        <a
-          href='/about'
-          className='bg-white py-2 px-10 text-[#5A82B4] font-bold rounded-3xl'
-        >
-          {button}
-        </a>
+        {onStart && (
+          <button
+            onClick={onStart}
+            className='bg-white py-2 px-10 text-[#5A82B4] font-bold rounded-3xl cursor-pointer'
+          >
+            {button}
+          </button>
+        )}
+
+        {onRestart && (
+          <button
+            onClick={onRestart}
+            className='bg-white py-2 px-10 text-[#5A82B4] font-bold rounded-3xl cursor-pointer'
+          >
+            {button}
+          </button>
+        )}
         {button === 'Play' && (
-          <a href='' className='font-extralight text-sm'>
-            Get the App
-          </a>
+          <button className='font-extralight text-sm'>Get the App</button>
         )}
       </div>
     </div>
