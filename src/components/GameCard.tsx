@@ -19,7 +19,7 @@ const initialGrid: (string | null)[][] = [
 
 export const GameCard = ({ onEnd }: Props) => {
   const [grid, setGrid] = useState<(string | null)[][]>(initialGrid);
-  const [instructions, setInstructions] = useState('');
+  const [clues, setClue] = useState<string>('');
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>([
     0, 2,
   ]);
@@ -33,25 +33,52 @@ export const GameCard = ({ onEnd }: Props) => {
 
     const newGrid = [...grid];
     newGrid[row] = [...newGrid[row]];
-    newGrid[row][col] = key;
-    setGrid(newGrid);
 
-    let nextRow = row;
-    let nextCol = col + 1;
-
-    while (nextRow < grid.length) {
-      if (nextCol < grid[nextRow].length) {
-        if (grid[nextRow][nextCol] !== null) {
-          setSelectedCell([nextRow, nextCol]);
-          return;
-        }
-        nextCol++;
+    if (key === '') {
+      if (grid[row][col] !== '') {
+        newGrid[row][col] = '';
+        setGrid(newGrid);
       } else {
-        nextRow++;
-        nextCol = 0;
+        let prevRow = row;
+        let prevCol = col - 1;
+
+        while (prevRow >= 0) {
+          if (prevCol >= 0) {
+            if (grid[prevRow][prevCol] !== null) {
+              newGrid[prevRow][prevCol] = '';
+              setGrid(newGrid);
+              setSelectedCell([prevRow, prevCol]);
+              return;
+            }
+            prevCol--;
+          } else {
+            prevRow--;
+            if (prevRow >= 0) prevCol = grid[prevRow].length - 1;
+          }
+        }
       }
+    } else {
+      newGrid[row][col] = key;
+      setGrid(newGrid);
+
+      let nextRow = row;
+      let nextCol = col + 1;
+
+      while (nextRow < grid.length) {
+        if (nextCol < grid[nextRow].length) {
+          if (grid[nextRow][nextCol] !== null) {
+            setSelectedCell([nextRow, nextCol]);
+            return;
+          }
+          nextCol++;
+        } else {
+          nextRow++;
+          nextCol = 0;
+        }
+      }
+
+      setSelectedCell([0, 2]);
     }
-    setSelectedCell([0, 2]);
   };
 
   useEffect(() => {
@@ -84,7 +111,7 @@ export const GameCard = ({ onEnd }: Props) => {
   useEffect(() => {
     for (let i = 0; i < words.length; i++) {
       if (selectedCell?.[0] === i) {
-        setInstructions(`${i + 1}.- ${words[i].clue}`);
+        setClue(`${i + 1}.- ${words[i].clue}`);
       }
     }
   }, [selectedCell]);
@@ -139,7 +166,7 @@ export const GameCard = ({ onEnd }: Props) => {
       <div className='w-full'>
         <div className='px-8 bg-[#A7D8FF] py-6'>
           <p className='w-full h-auto text-base sm:h-6 text-center font-bold sm:text-xl'>
-            {instructions}
+            {clues}
           </p>
         </div>
         <KeyboardGrid onKeyPress={handleKeyPress} />
