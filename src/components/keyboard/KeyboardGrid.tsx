@@ -18,7 +18,7 @@ export const KeyboardGrid = ({ onKeyPress }: Props) => {
         />
       ))}
       <div
-        className='bg-white w-14 h-10 sm:w-[70px] sm:h-12 shadow shadow-gray-400 rounded-lg flex justify-center items-center'
+        className='bg-white w-14 h-10 sm:w-[70px] sm:h-12 shadow shadow-gray-400 rounded-lg flex justify-center items-center active:bg-[#A7D8FF] transition-all duration-200 active:scale-110'
         onClick={() => onKeyPress('')}
       >
         <FiDelete size={24} />
