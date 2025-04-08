@@ -1,27 +1,41 @@
 interface Props {
-  letter: string;
+  cell: string | null;
   onClick: () => void;
   isBlack: boolean;
   isSelected: boolean;
-  isHighlighted: boolean;
+  isRowHighlighted: boolean;
+  isColHighlighted: boolean;
+  toggle: boolean;
 }
 
 export const Cell = ({
-  letter,
+  cell,
   onClick,
   isBlack,
   isSelected,
-  isHighlighted,
+  isRowHighlighted,
+  isColHighlighted,
+  toggle,
 }: Props) => {
   return isBlack ? (
-    <div className='w-14 h-14 bg-black border border-gray-400'></div>
+    <div className='w-14 h-14 bg-black border border-gray-400' />
   ) : (
     <div
-      className={`relative w-14 h-14 border border-gray-400 flex items-center justify-center cursor-pointer 
-        ${isSelected ? 'bg-yellow-300' : isHighlighted ? 'bg-[#A7D8FF]' : ''}`}
+      className={`relative w-14 h-14 border border-gray-400 flex items-center justify-center cursor-pointer
+        ${
+          isSelected
+            ? 'bg-yellow-300'
+            : toggle
+            ? isRowHighlighted
+              ? 'bg-[#A7D8FF]'
+              : ''
+            : isColHighlighted
+            ? 'bg-[#A7D8FF]'
+            : ''
+        }`}
       onClick={onClick}
     >
-      <span className='font-bold text-2xl'>{letter}</span>
+      <span className='font-bold text-2xl'>{cell}</span>
     </div>
   );
 };

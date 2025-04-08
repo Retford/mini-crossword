@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { KeyboardGrid } from './keyboard/KeyboardGrid';
 import { CrosswordGrid } from './table/CrosswordGrid';
-import { type Word, words } from './words/words';
+import { words } from './words/words';
 import Swal from 'sweetalert2';
+import { checkAnswer } from '../lib/checkAnswer';
 
 interface Props {
   onEnd: () => void;
@@ -20,9 +21,8 @@ const initialGrid: (string | null)[][] = [
 export const GameCard = ({ onEnd }: Props) => {
   const [grid, setGrid] = useState<(string | null)[][]>(initialGrid);
   const [clues, setClue] = useState<string>('');
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>([
-    0, 2,
-  ]);
+  const [selectedCell, setSelectedCell] = useState<[number, number]>([0, 2]);
+  const [toggle, setToggle] = useState<boolean>(true);
 
   const handleKeyPress = (key: string) => {
     if (!selectedCell) return;
@@ -32,6 +32,7 @@ export const GameCard = ({ onEnd }: Props) => {
     if (grid[row][col] === null) return;
 
     const newGrid = [...grid];
+
     newGrid[row] = [...newGrid[row]];
 
     if (key === '') {
@@ -56,10 +57,13 @@ export const GameCard = ({ onEnd }: Props) => {
             if (prevRow >= 0) prevCol = grid[prevRow].length - 1;
           }
         }
+        setSelectedCell([4, 2]);
       }
     } else {
       newGrid[row][col] = key;
       setGrid(newGrid);
+      console.log({ row });
+      console.log({ col });
 
       let nextRow = row;
       let nextCol = col + 1;
@@ -98,29 +102,26 @@ export const GameCard = ({ onEnd }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCell, grid]);
 
-  function checkAnswer(word: Word, grid: (string | null)[][]): boolean {
-    for (let i = 0; i < word.word.length; i++) {
-      const x = word.direction === 'horizontal' ? word.x + i : word.x;
-      const y = word.direction === 'vertical' ? word.y + i : word.y;
-      if (grid[y][x] !== word.word[i]) return false;
-    }
-    return true;
-  }
-
   // Cambiar el nombre de la pista
   useEffect(() => {
     for (let i = 0; i < words.length; i++) {
-      if (selectedCell?.[0] === i) {
-        setClue(`${i + 1}.- ${words[i].clue}`);
+      for (let j = 0; j <= i; j++) {
+        if (selectedCell?.[0] === i && toggle) {
+          setClue(`${words[i][0].clue}`);
+        } else if (selectedCell[1] === i && !toggle) {
+          setClue(`${words[i][1].clue}`);
+        }
       }
     }
-  }, [selectedCell]);
+  }, [selectedCell, toggle]);
 
   const validationFullGrid = grid.flat().some((value) => value === '');
 
   useEffect(() => {
     if (!validationFullGrid) {
-      const allCorrect = words.every((word) => checkAnswer(word, grid));
+      const allCorrect = words.every((group) =>
+        group.every((word) => checkAnswer(word, grid))
+      );
 
       if (allCorrect) {
         Swal.fire({
@@ -161,6 +162,8 @@ export const GameCard = ({ onEnd }: Props) => {
           grid={grid}
           selectedCell={selectedCell}
           setSelectedCell={setSelectedCell}
+          toggle={toggle}
+          setToggle={setToggle}
         />
       </div>
       <div className='w-full'>
