@@ -1,54 +1,83 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Crossword Game
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive Grid**: A crossword grid where players can input letters using the keyboard.
+- **Clue Display**: The current clue for horizontal or vertical word entries is displayed.
+- **Validation**: The game checks if the answers are correct and provides feedback upon completion.
+- **Responsive Design**: The UI adjusts based on the screen size.
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+To run the game locally, follow these steps:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. Clone the repository:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+   ```bash
+   git clone https://github.com/Retford/mini-crossword.git
+   cd mini-crossword
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Install dependencies:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and go to `http://localhost:5173` to play the game.
+
+## Technologies Used
+
+- **React**: For building the user interface.
+- **TypeScript**: For type safety and improved development experience.
+- **TailwindCSS**: For styling and layout.
+- **React Icons**: For UI components like icons.
+- **SweetAlert2**: For user-friendly alerts and notifications.
+
+## Folder Structure
+
+```plaintext
+├───public
+│   │   mini-crossword.svg
+│   │   
+│   └───images
+│           mini-2.gif
+│           mini.gif
+│           
+└───src
+    │   index.css
+    │   main.tsx
+    │   MiniApp.tsx
+    │   vite-env.d.ts
+    │   
+    ├───components
+    │   │   Card.tsx
+    │   │   GameCard.tsx
+    │   │   
+    │   ├───keyboard
+    │   │       Keyboard.tsx
+    │   │       KeyboardGrid.tsx
+    │   │       
+    │   ├───table
+    │   │       Cell.tsx
+    │   │       CrosswordGrid.tsx
+    │   │       
+    │   ├───ui
+    │   │       Main.tsx
+    │   │       
+    │   └───words
+    │           words.ts
+    │           
+    ├───hooks
+    │       useGame.ts
+    │       
+    └───lib
+            checkAnswer.ts
 ```
